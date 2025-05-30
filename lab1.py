@@ -18,7 +18,7 @@ for j in range(0, num_attributes):
 for i in range(0, len(a)):
     if a[i][num_attributes] == 'yes':
         for j in range(0, num_attributes):
-            if a[i][j] == hypo[j]:
+            if a[i][j] != hypo[j]:
                 hypo[j] = '?'
             else:
                 hypo[j] = a[i][j]
