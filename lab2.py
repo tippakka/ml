@@ -1,5 +1,4 @@
 import csv
-
 a = []
 csvfile = open('2.csv')
 reader = csv.reader(csvfile)
@@ -8,7 +7,6 @@ for row in reader:
     print(row)
 
 num_attributes = len(a[0]) - 1
-
 print("\nInitial Hypothesis: \n")
 s = ['0'] * num_attributes
 g = ['?'] * num_attributes
@@ -17,17 +15,21 @@ print("The most General: ", g)
 
 for j in range(0, num_attributes):    
     s[j] = a[0][j]
-
+    
 temp = []
-
 print("\nCandidate Algorithm: ")
+
 for i in range(0, len(a)):  
+    # Yes
     if a[i][num_attributes] == 'yes':
         for j in range(0, num_attributes):
             if a[i][j] != s[j]:
                 s[j] = '?'
 
-        temp = [h for h in temp if all(h[j] == '?' or h[j] == s[j] for j in range(num_attributes))]
+        for j in range(0, num_attributes):
+            for k in range(1, len(temp)):
+                if temp[k][j] != '?' and temp[k][j] != s[j]:
+                    del temp[k]
 
         print("For instance {0} Hypo S{0}:".format(i+1), s)
         if len(temp) == 0:
@@ -35,7 +37,8 @@ for i in range(0, len(a)):
         else:
             print("For instance {0} Hypo G{0}:".format(i+1), temp)
 
-    elif a[i][num_attributes] == 'no':
+    # No
+    if a[i][num_attributes] == 'no':
         for j in range(0, num_attributes):
             if s[j] != a[i][j] and s[j] != '?':
                 new_g = ['?'] * num_attributes
