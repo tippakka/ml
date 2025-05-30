@@ -4,7 +4,6 @@ import random
 import statistics
 
 def calc_prob(x, mean, stdev):
-    if stdev == 0: return 1 if x == mean else 0
     exp = math.exp(-((x - mean) ** 2) / (2 * stdev ** 2))
     return (1 / (math.sqrt(2 * math.pi) * stdev)) * exp
 
