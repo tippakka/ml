@@ -6,7 +6,6 @@ from colorama import Fore, Back, Style
 
 init()
 
-# Encodings for categorical variables
 ageEnum = {'SuperSeniorCitizen': 0, 'SeniorCitizen': 1, 'MiddleAged': 2, 'Youth': 3, 'Teen': 4}
 genderEnum = {'Male': 0, 'Female': 1}
 familyHistoryEnum = {'Yes': 0, 'No': 1}
@@ -15,7 +14,6 @@ lifestyleEnum = {'Sedentary': 0, 'Active': 1}
 cholesterolEnum = {'High': 0, 'Borderline': 1, 'Normal': 2}
 heartDiseaseEnum = {'Yes': 0, 'No': 1}
 
-# Load CSV data
 data = []
 with open('7.csv') as csvfile:
     lines = csv.reader(csvfile)
@@ -34,7 +32,6 @@ with open('7.csv') as csvfile:
 data = np.array(data)
 N = len(data)
 
-# Define priors and observations
 P_age = bp.nodes.Dirichlet(1.0 + np.ones(5))
 age = bp.nodes.Categorical(P_age, plates=(N,))
 age.observe(data[:, 0])
@@ -59,7 +56,6 @@ P_cholesterol = bp.nodes.Dirichlet(1.0 + np.ones(3))
 cholesterol = bp.nodes.Categorical(P_cholesterol, plates=(N,))
 cholesterol.observe(data[:, 5])
 
-# Define conditional distribution for heart disease
 P_heartdisease = bp.nodes.Dirichlet(np.ones((2, 2, 2, 3, 2, 3)))
 heartdisease = bp.nodes.Categorical(
     P_heartdisease[age, gender, family_history, diet, lifestyle, cholesterol]
@@ -68,7 +64,6 @@ heartdisease.observe(data[:, 6])
 
 P_heartdisease.update()
 
-# Inference
 m = 0
 while m == 0:
     print(Fore.YELLOW + "\nEnter patient's data to predict Heart Disease Probability:\n" + Style.RESET_ALL)
