@@ -1,48 +1,30 @@
 import pandas as pd
-import matplotlib.pyplot as plt
-from sklearn.mixture import GaussianMixture
-from sklearn.cluster import KMeans
 import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn.mixture import GaussianMixture
 
-data = pd.read_csv("8.csv")  # Ensure 'em.csv' exists in the working directory
-
-print("Input Data and Shape:")
-print(data.shape)
-print(data.head())
-
+data = pd.read_csv("8.csv")
 X = data[['v1', 'v2']].values
-print("Shape of X:", X.shape)
+print("Dataset:\n", X[:5])
 
-print("Graph for whole dataset")
-plt.scatter(X[:, 0], X[:, 1], c='black', s=10)
+plt.scatter(X[:, 0], X[:, 1], c='black', s=20)
 plt.title("Original Data")
-plt.xlabel("V1")
-plt.ylabel("V2")
 plt.show()
 
 kmeans = KMeans(n_clusters=3, random_state=0)
-kmeans_labels = kmeans.fit_predict(X)
-centroids = kmeans.cluster_centers_
-print("KMeans Labels:", kmeans_labels)
-print("KMeans Centroids:", centroids)
+labels_km = kmeans.fit_predict(X)
+print("KMeans Labels:\n", labels_km)
+print("Centroids:\n", kmeans.cluster_centers_)
 
-plt.scatter(X[:, 0], X[:, 1], c=kmeans_labels, s=50, cmap='viridis')
-plt.scatter(centroids[:, 0], centroids[:, 1], marker='*', s=200, c='red')
+plt.scatter(X[:, 0], X[:, 1], c=labels_km, cmap='viridis', s=30)
+plt.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:, 1], c='red', s=100, marker='*')
 plt.title("KMeans Clustering")
-plt.xlabel("V1")
-plt.ylabel("V2")
 plt.show()
 
-
 gmm = GaussianMixture(n_components=3, random_state=0)
-gmm_labels = gmm.fit_predict(X)
-probs = gmm.predict_proba(X)
-sizes = 10 + probs.max(axis=1) * 200  # Size = confidence based
+labels_gmm = gmm.fit(X).predict(X)
 
-print("GMM Labels:", gmm_labels)
-
-plt.scatter(X[:, 0], X[:, 1], c=gmm_labels, s=sizes, cmap='viridis')
-plt.title("EM Clustering (Gaussian Mixture Model)")
-plt.xlabel("V1")
-plt.ylabel("V2")
+plt.scatter(X[:, 0], X[:, 1], c=labels_gmm, cmap='plasma', s=30)
+plt.title("GMM Clustering")
 plt.show()
