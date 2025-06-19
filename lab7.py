@@ -1,10 +1,6 @@
 import bayespy as bp
 import numpy as np
 import csv
-from colorama import init
-from colorama import Fore, Back, Style
-
-init()
 
 ageEnum = {'SuperSeniorCitizen': 0, 'SeniorCitizen': 1, 'MiddleAged': 2, 'Youth': 3, 'Teen': 4}
 genderEnum = {'Male': 0, 'Female': 1}
@@ -13,6 +9,7 @@ dietEnum = {'High': 0, 'Medium': 1, 'Low': 2}
 lifestyleEnum = {'Sedentary': 0, 'Active': 1}
 cholesterolEnum = {'High': 0, 'Borderline': 1, 'Normal': 2}
 heartDiseaseEnum = {'Yes': 0, 'No': 1}
+
 
 data = []
 with open('7.csv') as csvfile:
@@ -64,21 +61,18 @@ heartdisease.observe(data[:, 6])
 
 P_heartdisease.update()
 
+# Inference
 m = 0
 while m == 0:
-    print(Fore.YELLOW + "\nEnter patient's data to predict Heart Disease Probability:\n" + Style.RESET_ALL)
+    print("\n")
     res = [
-        list(ageEnum.values()).index(ageEnum[input("Enter Age Group (Teen/Youth/MiddleAged/SeniorCitizen/SuperSeniorCitizen): ")]),
-        list(genderEnum.values()).index(genderEnum[input("Enter Gender (Male/Female): ")]),
-        list(familyHistoryEnum.values()).index(familyHistoryEnum[input("Family History (Yes/No): ")]),
-        list(dietEnum.values()).index(dietEnum[input("Diet (High/Medium/Low): ")]),
-        list(lifestyleEnum.values()).index(lifestyleEnum[input("Lifestyle (Sedentary/Active): ")]),
-        list(cholesterolEnum.values()).index(cholesterolEnum[input("Cholesterol (High/Borderline/Normal): ")])
-    ]
+    ageEnum[input("Enter Age Group (Teen/Youth/MiddleAged/SeniorCitizen/SuperSeniorCitizen): ")],
+    genderEnum[input("Enter Gender (Male/Female): ")],
+    familyHistoryEnum[input("Family History (Yes/No): ")],
+    dietEnum[input("Diet (High/Medium/Low): ")],
+    lifestyleEnum[input("Lifestyle (Sedentary/Active): ")],
+    cholesterolEnum[input("Cholesterol (High/Borderline/Normal): ")]
+]
+    print(str(res))
 
-    q = bp.nodes.Categorical(
-        P_heartdisease[res[0], res[1], res[2], res[3], res[4], res[5]]
-    )
-    print(Fore.GREEN + "Probability of Heart Disease: {:.2f}%".format(q.get_moments()[0][0] * 100) + Style.RESET_ALL)
-
-    m = int(input(Fore.CYAN + "Enter 0 to continue, 1 to exit: " + Style.RESET_ALL))
+    m = int(input("Enter 0 to continue, 1 to exit: " ))
